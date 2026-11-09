@@ -136,7 +136,7 @@ PosnicPro.branches = {
                 PosnicPro.settings.loadSelectSettingState(d.country_id, d.state || '');
                 PosnicPro.settings.applyTaxProfile(d.country || '');
                 $('#currency_setting').val(d.currency_text).trigger('change.select2');
-                var cv = (d.currency_value && d.currency_value[0]) || { currency_text: 'INR', currency_sign: '₹' };
+                var cv = (d.currency_value && d.currency_value[0]) || { currency_text: 'SSP', currency_sign: 'SSP' };
                 $('#currencyText').val(cv.currency_sign);
                 $('#currencyTextname').val(cv.currency_text);
                 $('#currency_type').empty().append(

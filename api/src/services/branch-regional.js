@@ -3,6 +3,17 @@ const { currency } = require('../json/currency.json');
 const currencyByCountry = require('../json/country_currency.json');
 const taxProfiles = require('./tax-profiles');
 
+const timezoneByCountry = {
+  BI: 'Africa/Bujumbura',
+  CD: 'Africa/Kinshasa',
+  KE: 'Africa/Nairobi',
+  RW: 'Africa/Kigali',
+  SO: 'Africa/Mogadishu',
+  SS: 'Africa/Juba',
+  TZ: 'Africa/Dar_es_Salaam',
+  UG: 'Africa/Kampala',
+};
+
 // Whitelist regional fields; derived labels and symbols always come from reference data.
 module.exports = function branchRegional(data) {
   const code = require('../utils/branch-country')({ country: data.country });
@@ -13,7 +24,7 @@ module.exports = function branchRegional(data) {
   if (data.currency_text && !selected) throw new Error('Choose a valid currency');
   const unit = selected || (code === 'IN' ? currency.find((item) => item.text === 'INR') : null);
   if (!unit) throw new Error('Choose a valid currency');
-  const timezone = data.time_zone || (country?.sortname === 'IN' ? 'Asia/Kolkata' : 'UTC');
+  const timezone = data.time_zone || timezoneByCountry[country?.sortname] || (country?.sortname === 'IN' ? 'Asia/Kolkata' : 'UTC');
   try {
     new Intl.DateTimeFormat('en', { timeZone: timezone });
   } catch (cause) {

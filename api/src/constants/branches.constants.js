@@ -6,11 +6,11 @@
 // Default values
 const DEFAULTS = {
   LOGO: 'store.png',
-  TIME_ZONE: 'Asia/Calcutta',
+  TIME_ZONE: 'Africa/Juba',
   TIME_FORMAT: 'enable',
   LANGUAGE: 'english',
-  CURRENCY: 'INR',
-  CURRENCY_TEXT: '₹',
+  CURRENCY: 'SSP',
+  CURRENCY_TEXT: 'SSP',
   THEME: 'default',
   PRINT_TYPE: 'standard',
 };

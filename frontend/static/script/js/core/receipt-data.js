@@ -486,7 +486,7 @@ PosnicPro.receiptLogo = function (paperWidth) {
         /* The switch is written to local storage as a boolean by one path and
            as a string by another, so compare the string either becomes. */
         if (typeof PosnicPro !== 'undefined' && PosnicPro.local
-            && String(PosnicPro.local.get('print_url')) === 'true') {
+            && String(PosnicPro.local.get('print_url')) === 'true' && PosnicPro.BRAND_URL) {
             footerLines.push(PosnicPro.BRAND_URL);
         }
 

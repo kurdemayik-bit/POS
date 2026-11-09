@@ -86,7 +86,7 @@ function generateInvoicePDF(options) {
   const hasDejavu = registerDejaVuSansCondensed(doc);
 
   // Get data
-  const currency = branch?.currency_type || '₹';
+  const currency = branch?.currency_type || 'SSP';
   const storeName = branch?.branch_name || 'Store';
   const storeAddress = branch?.store_address || '';
   const storeEmail = branch?.store_email || '';
@@ -530,7 +530,7 @@ function generateReceivingPDF(options) {
   const hasDejavu = registerDejaVuSansCondensed(doc);
 
   // Get data
-  const currency = branch?.currency_type || '₹';
+  const currency = branch?.currency_type || 'SSP';
   const storeName = branch?.branch_name || 'Store';
   const storeAddress = branch?.store_address || '';
   const storeEmail = branch?.store_email || '';

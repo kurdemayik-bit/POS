@@ -138,7 +138,7 @@
         }
         root.find('script, iframe, object, embed').remove();
         root.find('img').removeAttr('loading').removeAttr('decoding');
-        if (String(branch.print_url) === 'true') {
+        if (String(branch.print_url) === 'true' && PosnicPro.BRAND_URL) {
             $('<div class="receipt-brand-url">').css({ textAlign: 'center', marginTop: '4px' }).text(PosnicPro.BRAND_URL).appendTo(body);
         }
         return body.html();
@@ -191,7 +191,7 @@
         var sale = PosnicPro.receiptData(html);
         var root = $('<div>').html(html);
         var footerLines = String(sale.footer || '').split('\n').filter(function (line) { return line !== PosnicPro.BRAND_URL; });
-        if (root.find('.receipt-brand-url').length) { footerLines.push(PosnicPro.BRAND_URL); }
+        if (root.find('.receipt-brand-url').length && PosnicPro.BRAND_URL) { footerLines.push(PosnicPro.BRAND_URL); }
         sale.footer = footerLines.join('\n');
         var logo = root.find('.branch_image').filter(function () { return this.style.display !== 'none'; }).find('img').first();
         var footer = root.find('.footer-image img').first();

@@ -5,6 +5,39 @@ const bcrypt = require('bcryptjs');
 const fs = require('fs');
 const path = require('path');
 
+function currencyForCountry(countryName, explicitCode) {
+  const fallback = {
+    currency: 'SSP',
+    currency_text: 'South Sudanese Pound / SSP or SSP',
+    currency_type: 'SSP',
+    currency_value: [{ currency_text: 'SSP', currency_sign: 'SSP' }],
+  };
+  try {
+    const read = (name) => JSON.parse(fs.readFileSync(path.join(__dirname, '../json', name), 'utf8'));
+    const countryRows = read('countries.json').countries || [];
+    const country = countryRows.find((row) =>
+      String(row.value || '').trim().toLowerCase() === String(countryName || '').trim().toLowerCase()
+    );
+    const currencyByCountry = read('country_currency.json');
+    const currencies = read('currency.json').currency || [];
+    const requested = String(explicitCode || '').trim().toUpperCase();
+    const countryCode = String(country?.sortname || '').toUpperCase();
+    const mappedCode = currencyByCountry[countryCode] || '';
+    const unit = currencies.find((item) => item.text === requested && item.symbol)
+      || currencies.find((item) => item.text === mappedCode && item.symbol)
+      || currencies.find((item) => item.text === 'SSP' && item.symbol);
+    if (!unit) return fallback;
+    return {
+      currency: unit.symbol,
+      currency_text: unit.value.trim(),
+      currency_type: unit.symbol,
+      currency_value: [{ currency_text: unit.text, currency_sign: unit.symbol }],
+    };
+  } catch (_) {
+    return fallback;
+  }
+}
+
 class InstallModel extends BaseModel {
   constructor() {
     super();
@@ -14,6 +47,7 @@ class InstallModel extends BaseModel {
   async installInsertDocument(data) {
     try {
       const licenseId = new ObjectId(data.register_license);
+      const money = currencyForCountry(data.register_country, data.register_currency);
 
       // Check if user already exists
       const userCollection = await this.getCollection('users');
@@ -130,11 +164,11 @@ class InstallModel extends BaseModel {
         languge: '',
         indian_gst: 'gst_off',
         branch_gstin_number: '',
-        currency: '₹',
-        currency_text: 'India Rupee / INR or ₹',
-        currency_type: '₹',
-        currency_value: [{ currency_text: 'INR', currency_sign: '₹' }],
-        time_zone: (data.register_timezone || '').trim(),
+        currency: money.currency,
+        currency_text: money.currency_text,
+        currency_type: money.currency_type,
+        currency_value: money.currency_value,
+        time_zone: (data.register_timezone || '').trim() || 'Africa/Juba',
         printing_address: (data.register_address || '').trim(),
         smstype: 'way2sms',
         way2sms_api: '',

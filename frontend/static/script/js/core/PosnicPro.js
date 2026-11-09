@@ -3613,8 +3613,8 @@ PosnicPro = {
             if (image) {
             html += '<img style="display:inline-block;" src="' + image + '">';
             }
-            if (printUrl === 'true') {
-            html += '<div style="margin-top:4px;">' + PosnicPro.BRAND_URL + '</div>';
+            if (printUrl === 'true' && PosnicPro.BRAND_URL) {
+            html += '<div style="margin-top:4px;">' + PosnicPro.escapeHtml(PosnicPro.BRAND_URL) + '</div>';
             }
             html += '</div></div>';
             html += '</body></html>';
@@ -3668,7 +3668,7 @@ PosnicPro = {
             "top": "-1000000px"
         });
         let printUrlConfig = PosnicPro.local.get('print_url');
-        let url = ((printUrlConfig === 'true') ? '<div style="text-align:center;">' + PosnicPro.BRAND_URL + '</div>' : '');
+        let url = ((printUrlConfig === 'true' && PosnicPro.BRAND_URL) ? '<div style="text-align:center;">' + PosnicPro.escapeHtml(PosnicPro.BRAND_URL) + '</div>' : '');
         $("body").append(frame1);
         var frameDoc = frame1[0].contentWindow ? frame1[0].contentWindow : frame1[0].contentDocument.document ? frame1[0].contentDocument.document : frame1[0].contentDocument;
         frameDoc.document.open();
@@ -3689,8 +3689,8 @@ PosnicPro = {
         if (image) {
             frameDoc.document.write('<img style="display:inline-block;" src="' + image + '">');
         }
-        if (printUrlConfig === 'true') {
-            frameDoc.document.write('<div style="margin-top:4px;">' + PosnicPro.BRAND_URL + '</div>');
+        if (printUrlConfig === 'true' && PosnicPro.BRAND_URL) {
+            frameDoc.document.write('<div style="margin-top:4px;">' + PosnicPro.escapeHtml(PosnicPro.BRAND_URL) + '</div>');
         }
         frameDoc.document.write('</div></div>');
 
@@ -3770,7 +3770,7 @@ PosnicPro = {
     timeZone: function () {
         var t = PosnicPro.local.get('timezone');
         if (t && t !== 'null' && t !== 'undefined') { return t; }
-        try { return moment.tz.guess(); } catch (e) { return 'Asia/Kolkata'; }
+        try { return moment.tz.guess(); } catch (e) { return 'Africa/Juba'; }
     },
 
     commonDate: function () {
@@ -6104,6 +6104,12 @@ $('.custom_report_search_input').on('keyup', function (event) {
 (function applyBrand() {
     function paint(brand) {
         if (!brand || !brand.enabled || !brand.name) return;
+        var brandWebsite = '';
+        try {
+            var parsedWebsite = new URL(String(brand.website || '').trim());
+            if (parsedWebsite.protocol === 'http:' || parsedWebsite.protocol === 'https:') brandWebsite = parsedWebsite.href;
+        } catch (e) { /* no distributor website is valid */ }
+        PosnicPro.BRAND_URL = brandWebsite;
         // Read by the desktop title bar, which is built before this runs on a
         // cold load and must not fall back to our name.
         window.POSNIC_BRAND_NAME = brand.name;

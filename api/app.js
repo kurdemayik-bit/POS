@@ -676,7 +676,11 @@ const BRAND_LOGO_RE = /(?:^|\/)images\/logo\/(posnic-logo|posnic)\.svg$/;
 const serveBrandJson = async (_req, res) => {
   const brand = await loadBrand();
   res.set('cache-control', 'no-store');
-  res.json(brand ? { enabled: true, name: brand.name || '' } : { enabled: false });
+  res.json(brand ? {
+    enabled: true,
+    name: typeof brand.name === 'string' ? brand.name : '',
+    website: typeof brand.website === 'string' ? brand.website : '',
+  } : { enabled: false });
 };
 // Registered separately rather than as an array: path matching changed in
 // Express 5, and this route being silently unmatched is the whole bug.

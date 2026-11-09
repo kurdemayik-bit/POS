@@ -890,7 +890,7 @@
 <div class="form-group"><label for="qState">State / province</label><input id="qState" list="qStateList" autocomplete="address-level1"><datalist id="qStateList"></datalist></div>
 <div class="form-group"><label for="qCity">City / town *</label><input id="qCity" required autocomplete="address-level2"></div>
 </div><div class="quick-grid"><div class="form-group"><label for="qCurrency">Currency *</label><select id="qCurrency" required><option value="">Select currency</option></select></div>
-<div class="form-group"><label for="qTimezone">Timezone *</label><input id="qTimezone" list="qTimezoneList" required placeholder="e.g. Asia/Kolkata"><datalist id="qTimezoneList"></datalist></div>
+<div class="form-group"><label for="qTimezone">Timezone *</label><input id="qTimezone" list="qTimezoneList" required placeholder="e.g. Africa/Juba"><datalist id="qTimezoneList"></datalist></div>
 </div></section>
 <section id="offlineDetails" aria-label="Shop details">
                     <div class="form-group"><label for="qAddress">Business address</label><input type="text" id="qAddress" autocomplete="street-address" placeholder="Shop no, street, city"></div>
@@ -1052,7 +1052,7 @@
                     </div>
 
                     <!-- Hidden timezone field - auto-set based on country -->
-                    <input type="hidden" id="timezone" name="timezone" value="Asia/Kolkata">
+                    <input type="hidden" id="timezone" name="timezone" value="Africa/Juba">
 
                     <!-- Demo Data Section -->
                     <div class="form-group" style="margin-top: 25px; padding: 20px; background: #f8f9fa; border-radius: 8px; border: 2px solid #e9ecef;">
@@ -1870,11 +1870,13 @@ const form = document.getElementById('installForm');
                     countrySelect.appendChild(option);
                 });
 
-                // Set India as default
-                countrySelect.value = 'India';
-                document.getElementById('timezone').value = 'Asia/Kolkata'; // Set default timezone for India
-                console.log('Setting India as default, loading states...');
-                loadStates('101'); // India's country_id is 101
+                const defaultCountry = countriesData.find(country => country.value === 'South Sudan');
+                if (defaultCountry) {
+                    countrySelect.value = defaultCountry.value;
+                    document.getElementById('timezone').value = 'Africa/Juba';
+                    console.log('Setting South Sudan as default, loading states...');
+                    loadStates(defaultCountry.id);
+                }
             } catch (error) {
                 console.error('Error loading countries:', error);
             }
@@ -1942,6 +1944,13 @@ const form = document.getElementById('installForm');
             'Egypt': 'Africa/Cairo',
             'Nigeria': 'Africa/Lagos',
             'Kenya': 'Africa/Nairobi',
+            'Congo The Democratic Republic Of The': 'Africa/Kinshasa',
+            'Burundi': 'Africa/Bujumbura',
+            'Rwanda': 'Africa/Kigali',
+            'Somalia': 'Africa/Mogadishu',
+            'South Sudan': 'Africa/Juba',
+            'Tanzania': 'Africa/Dar_es_Salaam',
+            'Uganda': 'Africa/Kampala',
             'Russia': 'Europe/Moscow',
             'Turkey': 'Europe/Istanbul',
             'Italy': 'Europe/Rome',
@@ -1979,7 +1988,7 @@ const form = document.getElementById('installForm');
             console.log('Country changed:', countryName, 'Country ID:', countryId);
 
             // Auto-set timezone based on country
-            const timezone = countryTimezones[countryName] || 'Asia/Kolkata';
+            const timezone = countryTimezones[countryName] || 'Africa/Juba';
             document.getElementById('timezone').value = timezone;
             console.log('Timezone auto-set to:', timezone);
 

@@ -57,7 +57,7 @@ const branchSchema = new Schema(
     currency_text: { type: String },
     currency_value: { type: Array, default: [] },
     currency: { type: String },
-    time_zone: { type: String, default: 'Asia/Calcutta' },
+    time_zone: { type: String, default: 'Africa/Juba' },
     branch_gstin_number: { type: String },
     from_mail: { type: String },
     to_mail: { type: String },
@@ -422,7 +422,7 @@ class BranchModel {
       textlocal_sender: { type: 'String', select: true },
       theme: { type: 'String', select: true },
       time_format: { type: 'String', select: true, defaultValue: 'enable' },
-      time_zone: { type: 'String', select: true, defaultValue: 'Asia/Calcutta' },
+      time_zone: { type: 'String', select: true, defaultValue: 'Africa/Juba' },
       timeIntervalSetting: { type: 'String', select: true },
       to_mail: { type: 'String', select: true },
       updated_by: { type: 'String', select: false },
@@ -885,9 +885,9 @@ class BranchModel {
       withDefaults.staff_tips_enable = withDefaults.staff_tips_enable ?? false;
       withDefaults.staff_roster_enable = withDefaults.staff_roster_enable ?? true;
 
-      // Ensure time_zone has a default value if not present (matches PHP BaseModel line 49)
+      // Ensure time_zone has a default value if not present.
       if (!withDefaults.time_zone) {
-        withDefaults.time_zone = 'Asia/Calcutta';
+        withDefaults.time_zone = 'Africa/Juba';
       }
 
       // Ensure time_format always has a concrete value; legacy PHP stores
@@ -900,11 +900,11 @@ class BranchModel {
 
       // PHP lines 228-244: Ensure currency_value exists for frontend currency dropdown
       if (!withDefaults.currency_value || withDefaults.currency_value.length === 0) {
-        // Default to INR if not set (matches PHP default)
+        // Default to the distribution currency if not set.
         withDefaults.currency_value = [
           {
-            currency_text: 'INR',
-            currency_sign: '₹',
+            currency_text: 'SSP',
+            currency_sign: 'SSP',
           },
         ];
       }
@@ -1136,8 +1136,8 @@ class BranchModel {
 
       const currencyType = [
         {
-          currency_text: 'INR',
-          currency_sign: '₹',
+          currency_text: 'SSP',
+          currency_sign: 'SSP',
         },
       ];
 
@@ -1156,11 +1156,11 @@ class BranchModel {
         theme: 'blue',
         logo: 'store.png',
         indian_gst: 'gst_off', // Default to gst_off, can be overridden by settings
-        currency: '₹',
-        currency_text: 'India Rupee / INR or ₹',
-        currency_type: '₹',
+        currency: 'SSP',
+        currency_text: 'South Sudanese Pound / SSP or SSP',
+        currency_type: 'SSP',
         currency_value: currencyType,
-        time_zone: 'Asia/Kolkata', // Should come from settings or user
+        time_zone: 'Africa/Juba', // Can be changed in regional settings.
         printing_address: data.address?.trim(),
         smstype: 'way2sms',
         discount_amount: 0,

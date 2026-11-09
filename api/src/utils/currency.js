@@ -97,7 +97,7 @@
           JSON.parse(
             host.localStorage.getItem(
               'posnic.money.' + (host.localStorage.getItem('branch_id') || '')
-            ) || '{"currency":"₹","currencyCode":"INR"}'
+            ) || '{"currency":"SSP","currencyCode":"SSP"}'
           )
         );
       } catch {

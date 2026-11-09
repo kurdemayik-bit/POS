@@ -4,13 +4,23 @@
   const field = id => document.getElementById(id);
   const country = field('qCountry'), currency = field('qCurrency');
   if (!data || !country) return;
+  const regionTimezones = {
+    Burundi: 'Africa/Bujumbura',
+    'Congo The Democratic Republic Of The': 'Africa/Kinshasa',
+    Kenya: 'Africa/Nairobi',
+    Rwanda: 'Africa/Kigali',
+    Somalia: 'Africa/Mogadishu',
+    'South Sudan': 'Africa/Juba',
+    Tanzania: 'Africa/Dar_es_Salaam',
+    Uganda: 'Africa/Kampala',
+  };
   const option = (value, text = value) => new Option(text, value);
   data.countries.forEach(row => country.add(option(row[2])));
   data.currencies.forEach(code => currency.add(option(code)));
   const zones = typeof Intl.supportedValuesOf === 'function' ? Intl.supportedValuesOf('timeZone') : [];
   zones.forEach(zone => field('qTimezoneList').appendChild(option(zone)));
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-  field('qTimezone').value = timezone;
+  field('qTimezone').value = regionTimezones['South Sudan'];
   function updateCountry() {
     const row = data.countries.find(row => row[2] === country.value);
     field('qState').value = '';
@@ -21,14 +31,17 @@
     document.querySelector('label[for="qState"]').textContent = states.length ? 'State / province *' : 'State / province';
     if (row && data.currencies.includes(row[3])) currency.value = row[3];
     else currency.value = '';
+    const timezone = regionTimezones[country.value] || data.timezones[country.value];
+    if (timezone) field('qTimezone').value = timezone;
   }
+  const defaultCountry = data.countries.find(row => row[2] === 'South Sudan');
+  if (defaultCountry) { country.value = defaultCountry[2]; updateCountry(); }
   // Language is not location (many Indian computers use en-US). Only suggest
   // a country when the device timezone matches one bundled country mapping.
   try {
     const canonical = zone => new Intl.DateTimeFormat('en', { timeZone: zone }).resolvedOptions().timeZone;
-    const matches = Object.entries(data.timezones).filter(([, zone]) => canonical(zone) === canonical(timezone));
-    if (matches.length === 1 && data.countries.some(row => row[2] === matches[0][0])) {
-      country.value = matches[0][0]; updateCountry();
+    const matches = Object.entries({ ...data.timezones, ...regionTimezones }).filter(([, zone]) => canonical(zone) === canonical(timezone));
+        if (matches.length === 1 && matches[0][0] === 'South Sudan' && data.countries.some(row => row[2] === matches[0][0])) {country.value = matches[0][0]; updateCountry();
     }
   } catch (_) { /* Country remains an explicit choice. */ }
   country.addEventListener('change', updateCountry);
@@ -66,7 +79,7 @@
     }
     if (field('qTimezone').value.trim()) {
       try { new Intl.DateTimeFormat('en', { timeZone: field('qTimezone').value.trim() }).format(); }
-      catch (_) { messages.qTimezone = 'Choose a valid timezone, for example Asia/Kolkata.'; }
+      catch (_) { messages.qTimezone = 'Choose a valid timezone, for example Africa/Juba.'; }
     }
     ids.forEach(id => { const error = field(id + 'Error'); error.textContent = messages[id] || ''; error.hidden = !messages[id];
       if (messages[id]) field(id).setAttribute('aria-invalid', 'true'); else field(id).removeAttribute('aria-invalid'); });

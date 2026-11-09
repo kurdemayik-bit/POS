@@ -481,7 +481,7 @@ class InstallService {
    * country_currency.json, and currency.json supplies that code's symbol.
    * The old name-prefix match stays as the second attempt so any country
    * missing from the ISO table behaves exactly as before, and no match at
-   * all still keeps the INR default.
+   * all uses the distribution default.
    *
    * explicitCode (register_currency) wins over everything: it is the shop
    * owner's own onboarding choice, e.g. a USD-priced shop in the Emirates.
@@ -491,7 +491,7 @@ class InstallService {
       currency: DEFAULTS.CURRENCY,
       currency_text: DEFAULTS.CURRENCY_TEXT,
       currency_type: DEFAULTS.CURRENCY_TYPE,
-      currency_value: [{ currency_text: 'INR', currency_sign: '₹' }],
+      currency_value: [{ currency_text: 'SSP', currency_sign: 'SSP' }],
     };
     const name = String(countryName || '')
       .trim()
@@ -569,7 +569,7 @@ class InstallService {
       currency_text: money.currency_text,
       currency_type: money.currency_type,
       currency_value: money.currency_value,
-      time_zone: (data.register_timezone || '').trim() || 'Asia/Calcutta',
+      time_zone: (data.register_timezone || '').trim() || 'Africa/Juba',
       register: [],
       cashdenom_fields: [],
       printing_address: (data.register_address || '').trim(),
