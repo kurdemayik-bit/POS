@@ -202,6 +202,7 @@
   {"id":"201","text":"Africa/Gaborone","value":"Africa/Gaborone (GMT+02:00)"},
   {"id":"202","text":"Africa/Harare","value":"Africa/Harare (GMT+02:00)"},
   {"id":"203","text":"Africa/Johannesburg","value":"Africa/Johannesburg (GMT+02:00)"},
+  {"id":"402","text":"Africa/Juba","value":"Africa/Juba (GMT+02:00)"},
   {"id":"204","text":"Africa/Khartoum","value":"Africa/Khartoum (GMT+02:00)"},
   {"id":"205","text":"Africa/Kigali","value":"Africa/Kigali (GMT+02:00)"},
   {"id":"206","text":"Africa/Lubumbashi","value":"Africa/Lubumbashi (GMT+02:00)"},

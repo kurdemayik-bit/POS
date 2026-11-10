@@ -1601,6 +1601,7 @@ const form = document.getElementById('installForm');
             try {
                 const response = await fetch(`${API_BASE}/api/install/add`, {
                     method: 'POST',
+                    credentials: 'omit',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify(payload)
                 });
@@ -2434,6 +2435,7 @@ const form = document.getElementById('installForm');
                 // Call installation API
                 const response = await fetch(`${API_BASE}/api/install/add`, {
                     method: 'POST',
+                    credentials: 'omit',
                     headers: {
                         'Content-Type': 'application/json'
                     },
